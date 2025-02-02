@@ -6,6 +6,12 @@ const CONFIG = {
     },
     discord: {
         token: process.env.DISCORD_TOKEN
+    },
+    device: {
+        token: process.env.DEVICE_TOKEN
+    },
+    audio: {
+        mode: process.env.AUDIO_MODE || 'discord'
     }
 };
 
