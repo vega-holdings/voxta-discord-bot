@@ -1,4 +1,4 @@
-.aider*
+node_modules/
 .env
-node_modules
-*.sw[a-p]
+.DS_Store
+src/device-client/venv/
