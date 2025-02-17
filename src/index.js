@@ -1,20 +1,42 @@
 import { Bot } from './bot.js';
 import { DeviceBot } from './device-bot.js';
-import CONFIG from './config/config.js';
+import { MonitorBot } from './monitor-bot.js';
 import logger from './utils/logger.js';
+import CONFIG from './config/config.js';
+import dotenv from 'dotenv';
 import eventBus from './utils/event-bus.js';
 
-const audioMode = CONFIG.audio.mode;
-let bot;
+// Load environment variables
+dotenv.config();
 
-if (audioMode === 'discord') {
-    bot = new Bot(CONFIG.discord.token);
-} else if (audioMode === 'device') {
-    bot = new DeviceBot(CONFIG.device.token);
-} else {
-    logger.error('Invalid AUDIO_MODE in .env. Please set it to "discord" or "device".');
-    process.exit(1);
+async function main() {
+    const botMode = process.env.BOT_MODE?.toLowerCase() || 'discord';
+    logger.info(`Starting bot in ${botMode} mode`);
+
+    try {
+        let bot;
+        switch (botMode) {
+            case 'monitor':
+                logger.info('Initializing monitor bot...');
+                bot = new MonitorBot();
+                break;
+            case 'device':
+                bot = new DeviceBot();
+                break;
+            case 'discord':
+                bot = new Bot(CONFIG.discord.token);
+                break;
+            default:
+                throw new Error(`Unknown bot mode: ${botMode}`);
+        }
+        await bot.start();
+    } catch (error) {
+        logger.error('Fatal error:', error);
+        process.exit(1);
+    }
 }
+
+main();
 
 // Handle graceful shutdown
 process.on('SIGINT', async () => {
@@ -31,5 +53,3 @@ process.on('SIGTERM', async () => {
     await bot.destroy();
     process.exit(0);
 });
-
-bot.start();

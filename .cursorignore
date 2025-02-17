@@ -1,0 +1,32 @@
+# Node modules
+node_modules/
+package-lock.json
+yarn.lock
+
+# Python virtual environment
+venv/
+env/
+.env/
+.venv/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.pytest_cache/
+.python-version
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/ 
